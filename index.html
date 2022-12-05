@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <h1>Fake Facebook</h1>
+    <h3>Create post</h3>
+    <input placeholder="Title" onchange="getTitle(this)"></input>
+    <br>
+    <input placeholder="Subtitle" onchange="getSubTitle(this)"></input>
+    <br>
+    <br>
+    <button onclick="postIt()">Post it!</button>
+    <br>
+    <br>
+    <br>
+    <h3>Remove post by ID</h3>
+    <input placeholder="Post ID" onchange="getID(this)"></input>    
+    <button style="background-color:tomato;" onclick="removePost()">Remove!</button>
+    <br>
+    <br>
+    <br>
+    <h3>Comment specified post by ID</h3>
+    <input placeholder="Post id" onchange="getIDforComment(this)"></input> 
+    <input placeholder="Your comment" onchange="commentFunc(this)"></input>  
+    <button style="background-color:powderblue;" onclick="commentIt()">Comment!</button>
+
+</head>
+<body>
+    
+</body>
+
+<script>
+    //Variables
+    let posts = [{
+        title: "First post",
+        subTitle: "Some subtitle",
+        comments:[{
+            comment: "First Comment",
+            commentID: 1
+        }],
+        id:1
+    }]
+    let postTitle,postSubtitle = ""
+    let postID = 0
+    let IDforComment = 0
+    let commentForPost = ""
+
+    //Functions
+
+    //Post functions
+    function getTitle(title){
+        postTitle = title.value
+    }
+    function getSubTitle(subTitle){
+        postSubtitle = subTitle.value
+    }
+    function postIt(){
+        function makeRandomID(){
+            return Math.round(Math.random()*1000)
+        }
+        let randomID = makeRandomID()
+        posts.forEach(function(post){
+            if(post.id == randomID){
+                randomID = makeRandomID()
+            }
+        })
+        let newPost = {
+            title: postTitle,
+            subTitle: postSubtitle,
+            id: randomID 
+        }
+        posts.push(newPost)
+        console.log(newPost)
+        alert("New post just added!")
+    }
+
+
+
+
+
+    //Remove functions
+
+    function getID(ID){
+        postID = ID.value
+    }
+    function removePost(){
+        posts.forEach(
+            function(post){
+                if(post.id == postID){
+                    let index = posts.indexOf(post)
+                    posts.splice(index,1)
+                }
+                else{alert("There is no such post that matched this ID!")}
+            }
+        )
+    }
+
+
+    //Comment functions
+
+    function getIDforComment(ID){
+        IDforComment = ID.value
+    }
+    function commentFunc(comments){
+        commentForPost = comments.value
+    }
+    function commentIt(){
+        function makeRandomID(){
+            return Math.round(Math.random()*1000)
+        }
+        let randomCommentID = makeRandomID()
+        posts.forEach(function(post){
+            if(post.id == IDforComment){
+                let index = posts.indexOf(post)
+                let lastCheck = commentForPost.trim()
+                if(post.comments != null){
+                if(post.comments.commentID == randomCommentID){
+                randomCommentID = makeRandomID()
+                }
+                function commentForPostFiltered(){
+                    if (lastCheck == "" || lastCheck == null){
+                        throw alert("Empty comment is not allowed!")
+                    }
+                    else{return lastCheck}
+                }
+                let newComment = {
+                    comment: commentForPostFiltered(),
+                    commentID: randomCommentID
+                }
+                posts[index].comments.push({
+                    comment: commentForPostFiltered(),
+                    commentID: randomCommentID
+                }) 
+                throw alert("Comment added!")
+                }
+                else{
+                    function commentForPostFiltered(){
+                    if (lastCheck == "" || lastCheck == null){
+                        throw alert("Empty comment is not allowed!")
+                    }
+                    else{return lastCheck}
+                }
+                posts[index] = {
+                    title : posts[index].title,
+                    subTitle : posts[index].subTitle,
+                    comments:{
+                    comment: commentForPostFiltered(),
+                    commentID: randomCommentID},
+                    id : posts[index].id
+                }
+                throw alert("Comment added!")
+                }
+            }
+            
+        })
+        alert("There is no such post that matched this ID!")
+    }
+
+
+</script>
+</html>
